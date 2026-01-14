@@ -80,6 +80,11 @@ export class BilibiliService {
       throw error; // 让 Controller 处理 500
     }
   }
+  
+  public updateCookie(cookieStr: string) {
+    this.client.defaults.headers['Cookie'] = cookieStr;
+    console.log('[BilibiliService] Cookie updated');
+  }
 }
 
 export const bilibiliService = new BilibiliService();

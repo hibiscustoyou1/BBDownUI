@@ -2,14 +2,16 @@ import { Router, Express } from 'express';
 import { helloRouter } from './hello.routes';
 import { taskRouter } from './task.routes';
 import { bilibiliRouter } from './bilibili.routes';
-import { fileRouter } from './file.routes'; // Import
+import { fileRouter } from './file.routes';
+import { authRouter } from './auth.routes'
 
 const routes = Router();
 
 routes.use('/api', helloRouter);
 routes.use('/api/tasks', taskRouter);
 routes.use('/api/bilibili', bilibiliRouter);
-routes.use('/api/files', fileRouter); // Register
+routes.use('/api/files', fileRouter);
+routes.use('/api/auth', authRouter);
 
 export const initRoutes = (app: Express) => {
   app.use(routes);

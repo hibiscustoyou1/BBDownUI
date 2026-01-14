@@ -108,3 +108,24 @@ export interface FileInfo {
   mtime: number;      // 修改时间 (Unix Timestamp)
   extension: string;  // 文件后缀
 }
+
+export interface UserProfile {
+  isLogin: boolean;
+  mid?: number;
+  uname?: string;
+  face?: string;
+  level?: number;
+  vipType?: number; // 0: 无, 1: 月度, 2: 年度
+  vipStatus?: number; // 1: 有效
+}
+
+export interface QRCodeGenerateResult {
+  url: string;       // 二维码内容链接
+  qrcode_key: string; // 轮询用的 Key
+}
+
+export interface QRCodePollResult {
+  code: number; // 0: 成功, 86101: 未扫码, 86090: 已扫码未确认, 86038: 二维码失效
+  message: string;
+  cookies?: string; // 原始 Cookie 字符串 (仅内部使用，不一定传给前端)
+}
