@@ -101,3 +101,10 @@ export interface AddTaskRequest {
   url: string;
   options?: Partial<DownloadOptions>;
 }
+
+export interface FileInfo {
+  name: string;       // 文件名
+  size: number;       // 字节大小
+  mtime: number;      // 修改时间 (Unix Timestamp)
+  extension: string;  // 文件后缀
+}
