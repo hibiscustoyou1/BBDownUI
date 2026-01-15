@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { searchVideos } from '@/controllers/bilibili.controller';
+import { searchVideos, resolveVideo } from '@/controllers/bilibili.controller';
 
 const router = Router();
 
 router.get('/search', searchVideos);
-// router.get('/auth/qrcode', getQRCode); // 待实现
+router.get('/resolve/:bvid', resolveVideo); // New Endpoint
 
 export const bilibiliRouter = router;

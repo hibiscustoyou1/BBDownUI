@@ -1,0 +1,7 @@
+{
+  "filePattern": "<videoTitle>",
+  "multiThread": true,
+  "useHevc": true,
+  "deleteAfterSuccess": false,
+  "useAv1": true
+}

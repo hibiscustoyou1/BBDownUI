@@ -1,13 +1,10 @@
-// packages/shared/src/common/types.ts
-
-// --- 保留原有代码 ---
 export enum ApiCode {
   SUCCESS = 200,
   FAIL = 500,
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
   NOT_FOUND = 404,
-  BAD_REQUEST = 400, // 新增
+  BAD_REQUEST = 400,
 }
 
 export interface ApiResponse<T = any> {
@@ -20,20 +17,19 @@ export interface HelloData {
   message: string;
   timestamp: number;
 }
-// --- 原有代码结束 ---
 
-// --- 新增：BBDown 核心数据结构 (参考 BBDownServer.md) ---
+// --- BBDown 核心任务结构 ---
 
 export interface DownloadTask {
-  Aid: string;           // 唯一标识符 (Video AID)
-  Url: string;           // 原始 URL
+  Aid: string;
+  Url: string;
   TaskCreateTime: number;
   Title?: string;
   Pic?: string;
   VideoPubTime?: number;
   TaskFinishTime?: number;
-  Progress: number;      // 0-1
-  DownloadSpeed: number; // Byte/s
+  Progress: number;
+  DownloadSpeed: number;
   TotalDownloadedBytes: number;
   IsSuccessful: boolean;
 }
@@ -43,11 +39,11 @@ export interface DownloadTaskCollection {
   Finished: DownloadTask[];
 }
 
-// 对应 BBDown MyOption (部分核心字段)
+// 对应 BBDown MyOption (包含 v0.6.0+ 新增的控制参数)
 export interface DownloadOptions {
   Url: string;
-  UseHevc?: boolean;     // 是否使用 HEVC
-  UseAv1?: boolean;      // 是否使用 AV1
+  UseHevc?: boolean;
+  UseAv1?: boolean;
   OnlyShowInfo?: boolean;
   HideStreams?: boolean;
   MultiThread?: boolean;
@@ -59,27 +55,30 @@ export interface DownloadOptions {
   SkipCover?: boolean;
   SkipMux?: boolean;
   Language?: string;
-  WorkDir?: string;      // 工作目录
-  FilePattern?: string;  // 文件名格式
+  WorkDir?: string;
+  FilePattern?: string; // 文件名模板 e.g. <videoTitle>
+  
+  // [v0.6.0] 精准控制
+  DfnPriority?: string;      // 画质优先级 (e.g. "8K 超高清")
+  EncodingPriority?: string; // 编码优先级 (e.g. "hevc", "av1")
+  SelectPage?: string;       // 分P选择 (e.g. "1,2", "ALL")
 }
 
-// --- 新增：Bilibili 业务数据结构 ---
+// --- Bilibili 业务数据结构 ---
 
-// 视频搜索结果摘要
 export interface BiliVideoSnippet {
   bvid: string;
   aid: number;
   title: string;
-  pic: string;        // 封面图
-  author: string;     // UP主
-  mid: number;        // UP主ID
-  duration: string;   // 时长 (e.g. "03:20")
-  play: number;       // 播放量
-  pubdate: number;    // 发布时间
+  pic: string;
+  author: string;
+  mid: number;
+  duration: string;
+  play: number;
+  pubdate: number;
   description: string;
 }
 
-// 用户认证状态
 export interface AuthStatus {
   isLoggedIn: boolean;
   mid?: number;
@@ -87,11 +86,10 @@ export interface AuthStatus {
   face?: string;
   level?: number;
   vipStatus?: number;
-  qrcodeKey?: string; // 扫码登录用 Key
-  qrcodeUrl?: string; // 扫码登录用 URL
+  qrcodeKey?: string;
+  qrcodeUrl?: string;
 }
 
-// 统一的 API 请求参数
 export interface SearchParams {
   keyword: string;
   page?: number;
@@ -103,10 +101,10 @@ export interface AddTaskRequest {
 }
 
 export interface FileInfo {
-  name: string;       // 文件名
-  size: number;       // 字节大小
-  mtime: number;      // 修改时间 (Unix Timestamp)
-  extension: string;  // 文件后缀
+  name: string;
+  size: number;
+  mtime: number;
+  extension: string;
 }
 
 export interface UserProfile {
@@ -115,17 +113,79 @@ export interface UserProfile {
   uname?: string;
   face?: string;
   level?: number;
-  vipType?: number; // 0: 无, 1: 月度, 2: 年度
-  vipStatus?: number; // 1: 有效
+  vipType?: number;
+  vipStatus?: number;
 }
 
 export interface QRCodeGenerateResult {
-  url: string;       // 二维码内容链接
-  qrcode_key: string; // 轮询用的 Key
+  url: string;
+  qrcode_key: string;
 }
 
 export interface QRCodePollResult {
-  code: number; // 0: 成功, 86101: 未扫码, 86090: 已扫码未确认, 86038: 二维码失效
+  code: number;
   message: string;
-  cookies?: string; // 原始 Cookie 字符串 (仅内部使用，不一定传给前端)
+  cookies?: string;
+}
+
+// --- v0.6.0 全局偏好设置 ---
+
+export interface GlobalPreference {
+  downloadDir?: string;
+  filePattern?: string;
+  multiThread?: boolean;
+  useHevc?: boolean;
+  useAv1?: boolean;
+  audioOnly?: boolean;
+  deleteAfterSuccess?: boolean;
+}
+
+// --- v0.6.2 视频深度解析 (Smart Resolve) ---
+
+export interface VideoPage {
+  cid: number;
+  page: number;
+  part: string;     // 分P标题
+  duration: number; // 分P时长 (秒)
+}
+
+export interface VideoStreamInfo {
+  codec: string;      // AVC, HEVC, AV1
+  resolution: string; // e.g. "3840x2160"
+  fps: string;        // e.g. "60.0"
+  bitrate: number;    // kbps
+  size: number;       // 预估大小 (bytes)
+}
+
+export interface VideoQuality {
+  id: number;          // 清晰度ID (e.g. 120)
+  label: string;       // 清晰度描述 (e.g. "4K 超清")
+  streams: VideoStreamInfo[]; // 该画质下的流列表 (不同编码)
+  codecs: string[];    // 简略编码列表 (兼容旧逻辑)
+  isVip?: boolean;
+}
+
+export interface AudioQuality {
+  id: number;
+  label: string;
+}
+
+export interface VideoPlayInfo {
+  bvid: string;
+  cid: number; // 当前解析使用的参考CID
+  title: string;
+  cover: string;
+  duration: number; // 总时长或当前分P时长
+  pubdate: number;
+  owner: {
+    name: string;
+    mid: number;
+    face: string;
+  };
+  
+  // [v0.6.2] 分P列表
+  pages: VideoPage[];
+  
+  qualities: VideoQuality[];
+  audioQualities: AudioQuality[];
 }

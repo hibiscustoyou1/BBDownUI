@@ -11,4 +11,7 @@ export const AppConfig = {
   // Bilibili API Base URL
   BILI_API_BASE: 'https://api.bilibili.com',
   BILI_PASSPORT_BASE: 'https://passport.bilibili.com',
+  
+  // 新增: 偏好设置存储路径
+  PREFERENCE_FILE: path.resolve(process.cwd(), 'preferences.json'),
 };
