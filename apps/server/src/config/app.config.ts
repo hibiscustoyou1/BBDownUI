@@ -10,6 +10,4 @@ export const AppConfig = {
   
   PREFERENCE_FILE: path.resolve(process.cwd(), 'preferences.json'),
   JWT_SECRET: process.env.JWT_SECRET || 'bbdown-ui-default-secret-key-change-it',
-  
-  COOKIE_FILE: path.join(process.cwd(), 'cookie.txt'), // [后续Step3将废弃此文件]
 };

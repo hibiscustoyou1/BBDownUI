@@ -39,7 +39,6 @@ export interface DownloadTaskCollection {
   Finished: DownloadTask[];
 }
 
-// 对应 BBDown MyOption (包含 v0.6.0+ 新增的控制参数)
 export interface DownloadOptions {
   Url: string;
   UseHevc?: boolean;
@@ -56,12 +55,15 @@ export interface DownloadOptions {
   SkipMux?: boolean;
   Language?: string;
   WorkDir?: string;
-  FilePattern?: string; // 文件名模板 e.g. <videoTitle>
+  FilePattern?: string;
   
-  // [v0.6.0] 精准控制
-  DfnPriority?: string;      // 画质优先级 (e.g. "8K 超高清")
-  EncodingPriority?: string; // 编码优先级 (e.g. "hevc", "av1")
-  SelectPage?: string;       // 分P选择 (e.g. "1,2", "ALL")
+  // 精准控制
+  DfnPriority?: string;
+  EncodingPriority?: string;
+  SelectPage?: string;
+  
+  // [新增] 用于注入持久化的 Cookie
+  Cookie?: string;
 }
 
 // --- Bilibili 业务数据结构 ---

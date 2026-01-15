@@ -26,6 +26,9 @@ importers:
 
   apps/client:
     dependencies:
+      '@chenfengyuan/vue-qrcode':
+        specifier: ^2.0.0
+        version: 2.0.0(qrcode@1.5.4)(vue@3.5.26(typescript@5.9.3))
       '@repo/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -192,6 +195,12 @@ packages:
   '@babel/types@7.28.5':
     resolution: {integrity: sha512-qQ5m48eI/MFLQ5PxQj4PFaprjyCTLI37ElWMmNs0K8Lk3dVeOdNpB3ks8jc7yM5CDmVC73eMVk/trk3fgmrUpA==}
     engines: {node: '>=6.9.0'}
+
+  '@chenfengyuan/vue-qrcode@2.0.0':
+    resolution: {integrity: sha512-33Cfr0zjbc3Dd8d5b1IgzXRAgXH0c2Gv19VI4snS25V/x9Z41eg769tC+Us1x+vqgQQhgD5YUjLnkpkrQfeMSw==}
+    peerDependencies:
+      qrcode: ^1.5.0
+      vue: ^3.0.0
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -2058,6 +2067,11 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
+
+  '@chenfengyuan/vue-qrcode@2.0.0(qrcode@1.5.4)(vue@3.5.26(typescript@5.9.3))':
+    dependencies:
+      qrcode: 1.5.4
+      vue: 3.5.26(typescript@5.9.3)
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:

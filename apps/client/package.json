@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chenfengyuan/vue-qrcode": "^2.0.0",
     "@repo/shared": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@types/qrcode": "^1.5.6",
