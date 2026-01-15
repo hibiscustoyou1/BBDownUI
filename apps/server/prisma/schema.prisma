@@ -1,15 +1,36 @@
+// apps/server/prisma/schema.prisma
+
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
-model Temp {
-  id        Int      @id @default(autoincrement())
-  value     String
+model Task {
+  id        String   @id @default(uuid())
+  url       String
+  title     String?
+  status    String   @default("pending") // pending, running, completed, failed
+  progress  Float    @default(0)
+  info      String? // JSON string for extra info
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// [新增] 系统管理员表
+model AdminUser {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String // bcrypt hash
+  createdAt DateTime @default(now())
+}
+
+// [新增] 全局配置表 (Key-Value)
+model GlobalSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
 }

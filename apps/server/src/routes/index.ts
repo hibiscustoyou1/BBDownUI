@@ -13,7 +13,8 @@ routes.use('/api/tasks', taskRouter);
 routes.use('/api/bilibili', bilibiliRouter);
 routes.use('/api/files', fileRouter);
 routes.use('/api/auth', authRouter);
-routes.use('/api/preferences', preferenceRouter); // Register
+routes.use('/api/preferences', preferenceRouter);
+routes.use('/api/auth', authRouter);
 
 export const initRoutes = (app: Express) => {
   app.use(routes);

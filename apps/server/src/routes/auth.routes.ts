@@ -1,11 +1,17 @@
+// apps/server/src/routes/auth.routes.ts
 import { Router } from 'express';
-import { getProfile, getQRCode, checkQRCode, logout } from '@/controllers/auth.controller';
+import * as AuthController from '@/controllers/auth.controller';
 
 const router = Router();
 
-router.get('/me', getProfile);
-router.get('/qrcode', getQRCode);
-router.post('/qrcode/check', checkQRCode);
-router.post('/logout', logout);
+// System Auth
+router.get('/check', AuthController.checkInitStatus);
+router.post('/setup', AuthController.setupSystem);
+router.post('/login', AuthController.loginSystem);
+
+// Bilibili Auth
+router.get('/qrcode', AuthController.getQrcode);
+router.post('/qrcode/check', AuthController.pollQrcode);
+router.get('/profile', AuthController.getProfile);
 
 export const authRouter = router;
