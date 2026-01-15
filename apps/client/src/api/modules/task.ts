@@ -18,4 +18,7 @@ export const removeTask = async (aid: string) => {
   return data;
 };
 
-// (可选) 清空所有已完成任务 - 需后端支持，Step 1 已在 Service 实现但在 Controller 未暴露，暂且留空或只单独删除
+export const getBBDownVersion = async () => {
+  const { data } = await api.get<ApiResponse<string>>('/tasks/version');
+  return data;
+};

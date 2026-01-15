@@ -34,3 +34,12 @@ export const removeTask = async (req: Request, res: Response<ApiResponse>) => {
     res.status(500).json({ code: ApiCode.FAIL, msg: 'Failed to remove task' });
   }
 };
+
+export const getVersion = async (req: Request, res: Response<ApiResponse>) => {
+  try {
+    const version = await bbDownService.getVersion();
+    res.json({ code: ApiCode.SUCCESS, data: version });
+  } catch (error) {
+    res.status(500).json({ code: ApiCode.FAIL, msg: 'Failed to get BBDown version' });
+  }
+};
