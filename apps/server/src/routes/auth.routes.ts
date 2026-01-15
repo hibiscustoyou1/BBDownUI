@@ -1,4 +1,3 @@
-// apps/server/src/routes/auth.routes.ts
 import { Router } from 'express';
 import * as AuthController from '@/controllers/auth.controller';
 
@@ -13,5 +12,6 @@ router.post('/login', AuthController.loginSystem);
 router.get('/qrcode', AuthController.getQrcode);
 router.post('/qrcode/check', AuthController.pollQrcode);
 router.get('/profile', AuthController.getProfile);
+router.post('/logout/bilibili', AuthController.logoutBilibili); // [新增]
 
 export const authRouter = router;

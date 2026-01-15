@@ -2,6 +2,9 @@ import axios, { AxiosInstance } from 'axios';
 import { AppConfig } from '@/config/app.config';
 import { BiliVideoSnippet, SearchParams, VideoPlayInfo, VideoQuality, AudioQuality, VideoPage, VideoStreamInfo } from '@repo/shared';
 import crypto from 'crypto';
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 interface BiliApiResponse<T = any> {
   code: number;
@@ -60,19 +63,41 @@ export class BilibiliService {
   }
   
   /**
-   * 动态更新 Cookie (登录成功后调用)
+   * [新增] 从数据库初始化 Cookie
    */
+  public async init() {
+    try {
+      const setting = await prisma.globalSetting.findUnique({ where: { key: 'bili_cookie' } });
+      if (setting?.value) {
+        this.updateCookie(setting.value);
+        console.log('[BilibiliService] Config loaded from DB');
+      }
+    } catch (e) {
+      console.warn('[BilibiliService] Failed to load config from DB', e);
+    }
+  }
+  
   public updateCookie(cookieStr: string) {
     if (cookieStr) {
       const cleanCookie = cookieStr.trim();
       this.client.defaults.headers['Cookie'] = cleanCookie;
-      // 重置 WBI Key 缓存，确保使用新用户的密钥
       this.wbiImgKey = null;
       this.wbiSubKey = null;
       console.log('[BilibiliService] ✅ 用户 Cookie 已注入');
-    } else {
-      console.warn('[BilibiliService] ⚠️ Cookie 为空，服务将以降级模式运行');
     }
+  }
+  
+  /**
+   * [新增] 清除 Cookie
+   */
+  public clearCookie() {
+    const buvid3 = `${crypto.randomUUID()}infoc`;
+    const uuid = crypto.randomUUID();
+    // 恢复为游客 Cookie
+    this.client.defaults.headers['Cookie'] = `buvid3=${buvid3}; _uuid=${uuid}; b_nut=1710000000; home_lang=zh-CN`;
+    this.wbiImgKey = null;
+    this.wbiSubKey = null;
+    console.log('[BilibiliService] ⚠️ Cookie 已清除，恢复为游客模式');
   }
   
   // --- WBI 签名核心逻辑 ---
